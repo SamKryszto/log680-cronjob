@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    networks:
+      - network
+
+networks:
+  network:
+    name: cronjob_network
+    external: true
