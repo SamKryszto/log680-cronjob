@@ -14,7 +14,7 @@ jobs:
 
       - run:
           name: Check docker
-          command: which docker
+          command: type docker
           when: on_success
 
       - run:
