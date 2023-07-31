@@ -9,11 +9,6 @@ jobs:
           version: 20.10.18
           
       - run:
-          name: Check docker
-          command: type docker
-          when: on_success
-
-      - run:
           name: Build container
           command: docker-compose build
           when: on_success
