@@ -8,10 +8,6 @@ jobs:
       - setup_remote_docker:
           version: 20.10.18
           
-      # - run:
-      #     name: Create network
-      #     command: docker network create postgres_network
-
       - run:
           name: Check docker
           command: type docker
