@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: alpine:3
+      - image: circleci/ubuntu-server
     steps:
       - checkout
       - setup_remote_docker:
