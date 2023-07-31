@@ -13,8 +13,13 @@ jobs:
       #     command: docker network create postgres_network
 
       - run:
+          name: Check docker
+          command: which docker
+          when: on_success
+
+      - run:
           name: Build container
-          command: docker-compose build
+          command: docker compose build
           when: on_success
 
       - run:
