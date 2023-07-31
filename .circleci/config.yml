@@ -1,0 +1,57 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.18
+          
+      - run:
+          name: Build container
+          command: docker-compose build
+          when: on_success
+
+      - run:
+          name: List Docker images
+          command: docker-compose images -q
+
+      - run:
+          name: Deploy to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PWD" | docker login -u "$DOCKERHUB_ID" --password-stdin
+
+            # Define the repository name and tag
+            cronjob_repo="samkryszto/cronjob"
+            cronjob_tag="latest"
+
+            # Get the image ID for the service
+            image_id=$(docker images --format '{{.ID}}' | head -n1)
+            echo $image_id
+            
+            # Get the build number
+            build_number=${CIRCLE_BUILD_NUM:-local}
+
+            # Tag the image with the repository and tag
+            if [ "$build_number" = "local" ]; then
+              # Use "latest" tag for local builds
+              docker tag $image_id $cronjob_repo:latest
+            else
+              # Use build number as the tag for non-local builds
+              docker tag $image_id $cronjob_repo:$build_number
+              docker tag $image_id $cronjob_repo:$cronjob_tag
+            fi
+
+            # Push the tagged image to Docker Hub
+            docker push $cronjob_repo:$cronjob_tag
+          when: on_success
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: main
