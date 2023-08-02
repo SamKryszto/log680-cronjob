@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cronjob-deployment
+  name:  cronjob-deployment
 spec:
   replicas: 1  # Number of replicas (pods) for high availability
   selector:
