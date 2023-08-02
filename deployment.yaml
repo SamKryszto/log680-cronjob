@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cronjob-deployment
+spec:
+  replicas: 1  # Number of replicas (pods) for high availability
+  selector:
+    matchLabels:
+      app: cronjob-app
+  template:
+    metadata:
+      labels:
+        app: cronjob-app
+    spec:
+      containers:
+        - name: cronjob-container
+          image: samkryszto/cronjob:latest
+          ports:
+            - containerPort: 8000  # /Replace with your application's exposed port
+          resources:
+            limits:
+              cpu: "100m"  # CPU limit set to 500 milliCPU
+              memory: "100Mi"  # Memory limit set to 500 MiB
+            requests:
+              cpu: "0m"  # Minimum CPU request set to 100 milliCPU
+              memory: "0Mi"  # Minimum memory request set to 100 MiB
